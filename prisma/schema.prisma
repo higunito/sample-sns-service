@@ -12,3 +12,20 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+// Model定義
+model User {
+  id        String   @id @default(cuid())
+  username  String
+  email     String   @unique
+  password  String
+  posts     Post[]
+}
+
+model Post {
+  id        String   @id @default(cuid())
+  content   String
+  createdAt DateTime @default(now())
+  authorId  String
+  author    User    @relation(fields: [authorId], references: [id]) // 1対多の関係を定義
+}
